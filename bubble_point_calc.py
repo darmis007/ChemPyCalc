@@ -3,20 +3,23 @@ import math
 import numpy as np
 
 
-def DEW_T(A1, B1, C1, A2, B2, C2, Tn1, Tn2, y1, P, T=None):
+def BUBL_T(A1, B1, C1, A2, B2, C2, Tn1, Tn2, x1, P):
     i = 0
-    if T == None:
-        T = (Tn1 + Tn2)/2
+    T = (Tn1 + Tn2)/2
     while i == 0:
         T_init = T
         exp_1 = A1 - (B1/(T-273+C1))
+        print(exp_1)
         exp_2 = A2 - (B2/(T-273+C2))
-        exp_diff = math.exp(exp_1) - math.exp(exp_2)
-        x1 = (y1*P)/math.exp(exp_1)
+        print(exp_2)
+        exp_diff = np.exp(exp_1) - np.exp(exp_2)
+        print(exp_diff)
         T = B2/(A2 - np.log(P-(x1*exp_diff))) - C2
-        differ = abs(T - T_init)
+        differ = T - T_init
         diff_error = (differ/T_init)*100
-        if diff_error <= 1:
+        print(diff_error)
+        print("Iter "+str(i))
+        if abs(diff_error) <= 1:
             i = 1
     return T
 
@@ -31,7 +34,7 @@ B2 = float(input("Enter B2 value: "))
 C2 = float(input("Enter C2 value: "))
 Tn1 = float(input("Enter Tn1 value: "))
 Tn2 = float(input("Enter Tn2 value: "))
-y1 = float(input("Enter y1: "))
+x1 = float(input("Enter x1: "))
 P = float(input("Enter P: "))
 '''
 A1 = 13.7667
@@ -42,9 +45,20 @@ B2 = 2696.04
 C2 = 224.317
 Tn1 = 309.2
 Tn2 = 341.9
-y1 = 0.63
+x1 = 0.63
 P = 331.5
-
-T = DEW_T(A1, B1, C1, A2, B2, C2, Tn1, Tn2, y1, P)
+T = BUBL_T(A1, B1, C1, A2, B2, C2, Tn1, Tn2, x1, P)
 
 print("Temperature is {}".format(T))
+'''
+A1 = 13.7667 
+B1 = 2451.88
+C1 = 232.014
+A2 = 13.8193
+B2 = 2696.04
+C2 = 224.317
+Tn1 = 309.2
+Tn2 = 341.9
+x1 = 0.63
+P = 331.5
+'''
